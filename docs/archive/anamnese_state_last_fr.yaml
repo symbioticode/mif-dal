@@ -1,0 +1,438 @@
+# anamnese_state.yaml — MIF Ecosystem
+# Lire EN PREMIER à chaque session.
+# Mis à jour par l'Orchestratrice (Claude Chat) après chaque session de gouvernance.
+# Mis à jour par Claude Code ou Open Code uniquement sur les champs marqués [AGENT-WRITABLE].
+# Version: 4.2.0 · Mis à jour: 2026-05-10
+
+meta:
+  projet: "MIF Ecosystem — mif-dqf + mif-dal + mif-core (futur)"
+  phase_active: "DAL — Phase 3 COMPLÈTE · Publication PyPI prête"
+  module_courant: "mif-dal v0.1.0"
+  derniere_session: "2026-05-10"
+  orchestratrice: "Claude Sonnet 4.6 (Claude Chat)"
+  agent_execution: "Claude Code"
+  modele_utilise: "Nemotron 3 Super Free (OpenCode Zen)"
+
+# ─── VOCABULAIRE FIXE (ne pas dériver) ──────────────────────────────────────
+# Préfixe MIF-  = packages PyPI, infrastructure réutilisable
+# Préfixe QS-   = QAAF Studio uniquement, protocoles de recherche, PAS PyPI
+# "MIF" seul    = erreur de rédaction — toujours qualifier
+# Toute confusion MIF- vs QS- est un signal d'alarme.
+
+vocabulaire:
+  MIF_ecosystem: "MIF-DQF + MIF-DAL + MIF-Core + QS-PAF (QAAF Studio) + QS-MÉTIS (QAAF Studio)"
+  MIF_Core: "Module de certification des métriques — Phases 0-2 obligatoires, Phase 3 optionnelle v1.0"
+  MIF_DAL: "Data Abstraction Layer — infrastructure data, un actif par appel, pas de notion de paire"
+  QS_PAF: "Pair Adequacy Framework — protocole QAAF Studio uniquement, PAS PyPI"
+  QS_METIS: "Validation OOS — protocole QAAF Studio uniquement, PAS PyPI"
+  oracle_signal: "Signal synthétique certifiable — vit dans tests/ uniquement, jamais dans le module"
+  assembly_hash: "SHA-256 du stream brut AVANT toute transformation — concept DAL, différent de MIF-UID"
+  MIF_UID: "SHA-256(raw_data_hash || dqf_version || calendar || mode) — concept DQF uniquement"
+
+# ─── PIPELINE SÉQUENTIEL (architecture non-négociable) ──────────────────────
+
+pipeline:
+  sequence:
+    - step: 1
+      name: "MIF-DQF"
+      question: "Ces données sont-elles physiquement valides ?"
+      gate: "PASS ou WARNING — FAIL/VOID = chaîne arrêtée"
+      package: "mif-dqf (PyPI) v1.2.0.post1"
+      status: "STABLE — 224/224 tests"
+
+    - step: 2
+      name: "MIF-DAL"
+      question: "Peut-on assembler un stream certifié depuis les sources disponibles ?"
+      gate: "DALHandoff émis — DALHandoffError si impossible"
+      package: "mif-dal (PyPI) v0.1.0 — PRÊT POUR PUBLICATION"
+      status: "65/65 adversarial PASS · 169/177 pytest (8 skips réseau légitimes) · coverage ≥ 80%"
+      note: "Un appel par actif. Le caller assemble PAXG-USD + BTC-USD séparément (D-DAL-007)."
+
+    - step: 3
+      name: "QS-PAF"
+      question: "Cette paire est-elle adaptée à cette classe de méthodes ?"
+      gate: "HIERARCHIE_CONFIRMEE — STOP sinon (archiver, ne pas continuer)"
+      package: "QAAF Studio uniquement — PAS PyPI (D-MIF-001)"
+      status: "PROTOCOLE DOCUMENTÉ (PAF_Pair_Adequacy_Framework.md)"
+
+    - step: 4
+      name: "MIF-Core"
+      question: "Les métriques mesurent-elles ce qu'elles prétendent mesurer ?"
+      gate: "CERTIFIED / ARCHIVED / SUSPECT"
+      package: "mif-core (PyPI) — NON COMMENCÉ"
+      status: "EN ATTENTE — débloqué par mif-dal v0.1.0 (atteint)"
+      note: "SignalData construit par le caller à partir de deux DALHandoff. MIF-Core ne connaît pas DALHandoff."
+
+    - step: 5
+      name: "QS-MÉTIS"
+      question: "Le signal génère-t-il de la valeur OOS non triviale ?"
+      gate: "Q1 + Q2 + Q3 — NON sinon"
+      package: "QAAF Studio uniquement — PAS PyPI (D-MIF-002)"
+      status: "PROTOCOLE DOCUMENTÉ (protocole_metis_2.1.md)"
+
+# ─── ÉTAT ACTIF ────────────────────────────────────────────────────────────────
+
+etat_courant:
+  dqf_status: "STABLE — v1.2.0.post1 publié PyPI · 224/224 tests passing"
+
+  dal_status: |
+    PHASE 3 COMPLÈTE — publication PyPI prête
+    ─── Gates verts (checklist_pass65-65.txt — 2026-05-10) ───
+    65/65 adversarial_dal_check_p3.py PASS (sans réseau)
+    169/177 pytest passing (8 skips réseau légitimes — comportement attendu)
+    41/41 adversarial_dal_check.py PASS (Phase 2 non-régression)
+    Coverage global dal/ ≥ 80%  ✓
+    Coverage dal/core/handoff.py ≥ 80%  ✓
+    Coverage dal/core/pipeline.py ≥ 80%  ✓
+    Coverage dal/core/sources.py ≥ 80%  ✓
+    dal.__version__ = '0.1.0'  ✓
+    pyproject.toml version cohérente  ✓
+    CHANGELOG.md mentionne v0.1.0  ✓
+    README.md contient exemple get_certified_stream  ✓
+    classifiers PyPI déclarés  ✓
+    dal/__all__ complet  ✓
+    flake.nix : nodePackages absent  ✓
+    dukascopy.py : --help (pas --version)  ✓
+    ─── Adapters publiés ───
+    KrakenAdapter, YahooAdapter, DukascopyAdapter, InMemorySource
+    Cache local opérationnel (DALConfig.cache_dir)
+    yfinance épinglé ≥ 1.3.0, < 2.0.0
+    ─── Dette ouverte avant publication finale ───
+    TD-RUFF : 11 erreurs Ruff dans dal/ et tests/ — fix_ruff.sh généré
+    TD-VERIFY : verify_install.py — bug API get_certified_stream (TypeError)
+                → corrigé dans verify_install.py v2 (2026-05-10)
+    Kraken : données antérieures à juin 2024 indisponibles (limite API réelle)
+             → tous les tests d'intégration utilisent start ≥ 2024-06-01
+
+  mif_core_status: "NON COMMENCÉ — débloqué, prêt à démarrer après publication mif-dal"
+
+  prochaine_action: |
+    1. Appliquer fix_ruff.sh → vérifier dev.sh check PASS
+    2. Copier verify_install.py v2 → python scripts/verify_install.py PASS
+    3. bash scripts/cleanup_repo.sh --dry-run → valider → sans --dry-run
+    4. git add -A && git commit -m "chore: ruff fixes + cleanup pre-v0.1.0"
+    5. uv build && uv publish → PyPI publication
+    6. Démarrer MIF-Core Phase 0 spec
+
+  bloquants: []
+
+# ─── LEÇONS APPRISES CETTE SESSION (KB-DAL-006) ──────────────────────────────
+# À intégrer dans KB-DAL-006.md si session de code dédiée.
+
+kb_dal_006_lessons:
+  - "verify_install.py appelait get_certified_stream comme fonction module (sans self)
+     → toujours instancier DAL(config) avant d'appeler les méthodes d'instance"
+  - "checklist_pass65-65.txt = vert historique de référence.
+     Régression apparente dans session suivante = changements post-session (uv sync a
+     réinstallé numpy/pandas différents, le checker P3 avait une regex fragile).
+     Pattern VALIDATION_MANUELLE_AVANT_AUTOMATION confirmé."
+  - "Ruff : E501 dans les commentaires n'affecte pas le comportement.
+     Corriger mécaniquement avec fix_ruff.sh — ne pas refactorer la logique."
+  - "Kraken API : aucune donnée avant 12 mois glissants.
+     Règle permanente : tests d'intégration Kraken → start >= (aujourd'hui - 11 mois)"
+
+# ─── DÉCISIONS ARCHITECTURALES NON-RÉVOCABLES ──────────────────────────────────
+# Claude Code ne modifie jamais cette section.
+
+decisions_immuables:
+
+  dqf_core:
+    - id: D-DQF-001
+      decision: "MIF-UID calculé sur raw data, jamais sur cleaned data"
+      raison: "Préserve l'intégrité de traçabilité — raw data est l'ancrage"
+      source: "decisions_dqf_v1_1.md · fermé"
+
+    - id: D-DQF-002
+      decision: "DQFMode est mandatory (CERTIFICATION | DIAGNOSTIC) — pas de valeur par défaut"
+      raison: "Fail fast — toute certification non-déclarée est une erreur silencieuse"
+      source: "decisions_dqf_v1_1.md · fermé"
+
+    - id: D-DQF-003
+      decision: "Ordre évaluation CORE → ADVISORY est non-contamination, pas convention"
+      raison: "Si CORE échoue, ADVISORY n'est pas évaluable — données physiquement invalides"
+      source: "dialogue PCCD × MIF 18/04/2026"
+
+    - id: D-DQF-004
+      decision: "Tuples Python interdits dans tout dict YAML-exporté"
+      raison: "ConstructorError silencieux en prod — utiliser dict {start, end} à la place"
+      source: "KB-003 · bug documenté"
+
+    - id: D-DQF-005
+      decision: "detect_calendar() : ordre Forex avant Crypto dans les tests de suffixe"
+      raison: "EUR/USD détecté CRYPTO_24_7 si ordre inversé — bug de précédence"
+      source: "KB-003 · bug documenté"
+
+    - id: D-DQF-006
+      decision: "Dépendances optionnelles (pyarrow, fastparquet) : @pytest.mark.skipif obligatoire"
+      raison: "27 tests Parquet échoués en CI NixOS par ImportError non géré"
+      source: "KB-003"
+
+  dal_core:
+    - id: D-DAL-001
+      decision: "DAL est une vue, pas un conteneur — il n'appartient pas aux données"
+      raison: "Séparation responsabilités : DAL assemble, DQF certifie, MIF-Core qualifie"
+      source: "backlog PCCD × MIF 18/04/2026"
+
+    - id: D-DAL-002
+      decision: "DALHandoff est l'unique point de passage DAL → DQF → caller"
+      raison: "Atomicité : soit stream certifié, soit exception — jamais état intermédiaire"
+      source: "backlog PCCD × MIF 18/04/2026"
+
+    - id: D-DAL-003
+      decision: "DAL déclare dqf_version_target — migration DQF est opération explicite"
+      raison: "Pas de couplage implicite entre versions MIF-DAL et MIF-DQF"
+      source: "backlog PCCD × MIF 18/04/2026"
+
+    - id: D-DAL-004
+      decision: "C1 Stream Integrity reste c1_enabled: false jusqu'à DALHandoff stable"
+      raison: "C1 ne peut être spécifiée sans handoff_timestamp + assembly_hash définis"
+      source: "decisions_dqf_v1_1.md + backlog PCCD"
+
+    - id: D-DAL-005
+      decision: "DAL lève exception sur DQF FAIL/VOID. DAL transmet avec flag sur DQF WARNING."
+      raison: |
+        FAIL/VOID = données physiquement invalides — continuer est une erreur structurelle.
+        WARNING = données dégradées mais utilisables — le caller a le contexte pour décider.
+      source: "Session 2026-05-02 · validé Andrei"
+      statut: "FERMÉ"
+
+    - id: D-DAL-006
+      decision: "assembly_hash calculé sur raw data AVANT calendar alignment et AVANT ffill"
+      raison: |
+        Cohérence avec D-DQF-001 : l'ancrage est toujours le stream brut.
+        Séquence : fetch → hash(raw) → DQF(clean) → expose(cleaned).
+      source: "Session 2026-05-02 · validé Andrei"
+      statut: "FERMÉ"
+
+    - id: D-DAL-007
+      decision: "DAL assemble UN stream par appel (1 actif = 1 appel). Composition multi-actifs = responsabilité caller."
+      raison: |
+        Zéro couplage entre actifs dans la couche infrastructure.
+        Deux certifications DQF indépendantes = tests plus rapides et reproductibles isolément.
+      source: "Session 2026-05-05 · validé Andrei"
+      statut: "FERMÉ"
+
+    - id: D-DAL-008
+      decision: "Kraken API : données disponibles uniquement sur les 12 derniers mois glissants."
+      raison: |
+        Contrainte API réelle documentée — pas un bug DAL.
+        Tous les tests d'intégration Kraken utilisent start >= (today - 11 months).
+        PAXG-USD bloqué sur Kraken pour les utilisateurs canadiens (maintenance permanente)
+        → fallback Yahoo automatique.
+      source: "KB-DAL-005 · KB-DAL-006 · validé empiriquement"
+      statut: "FERMÉ"
+
+  mif_core:
+    - id: D-MIF-001
+      decision: "QS-PAF est un protocole QAAF Studio — PAS un package mif-paf sur PyPI"
+      source: "Session 2026-05-02"
+      statut: "FERMÉ"
+
+    - id: D-MIF-002
+      decision: "QS-MÉTIS est un protocole QAAF Studio — PAS un package sur PyPI"
+      source: "Session 2026-05-02"
+      statut: "FERMÉ"
+
+    - id: D-MIF-003
+      decision: "MIF-Core v0.1 implémente Phase 0 + Phase 1 + Phase 2 uniquement. Phase 3 hors scope."
+      source: "MIF_v5_KB_Lessons_from_QAAF_Studio.md · Section 1.3"
+      statut: "FERMÉ"
+
+    - id: D-MIF-004
+      decision: "Le signal oracle vit dans tests/test_oracle.py, jamais dans mif_core/"
+      source: "MIF_v5_KB_Lessons_from_QAAF_Studio.md · Section 3"
+      statut: "FERMÉ"
+
+    - id: D-MIF-005
+      decision: "strategy_fn doit recalculer depuis r_pair. Closure sur allocations pré-calculées = bug détectable."
+      source: "bug_make_strategy_fn().md"
+      statut: "FERMÉ"
+
+    - id: D-MIF-006
+      decision: "MIF Phase 1 : critère de dominance relative (cnsr_strat > cnsr_bench), pas seuil absolu."
+      source: "MIF_v5_KB_Lessons_from_QAAF_Studio.md · Section 7.1"
+      statut: "FERMÉ"
+
+# ─── INTERFACES VALIDÉES ──────────────────────────────────────────────────────
+
+interfaces_validees:
+
+  DALHandoff:
+    statut: "STABLE — implémentée et testée 65/65"
+    spec_reference: "DAL_SPECIFICATION_v1.0.md · Section 5"
+    champs:
+      stream: "pd.DataFrame"
+      asset_id: "str"
+      calendar: "str"
+      assembly_hash: "str  # SHA-256 hex 64 chars"
+      handoff_timestamp: "datetime  # UTC"
+      dal_version: "str"
+      source_manifest: "tuple  # frozen — tuple de dicts"
+      coverage: "str  # FULL | PARTIAL | DEGRADED"
+      truncated_days: "int"
+      dqf_status: "str  # PASS | WARNING"
+      dqf_mpi: "float  # 0–100"
+      dqf_version: "str"
+      dqf_version_target: "str"
+      dqf_report: "DQFReport"
+      aqi: "float  # 0–100"
+    note: "frozen=True — immutable après émission."
+
+  SignalData:
+    statut: "À VALIDER pour mif-core v0.1 — pas encore implémenté"
+    champs:
+      alloc_primary: "pd.Series"
+      prices_pair: "pd.Series"
+      prices_base_usd: "pd.Series"
+      prices_quote_usd: "pd.Series"
+      is_start: "str  # YYYY-MM-DD"
+      is_end: "str"
+      oos_start: "str"
+      oos_end: "str"
+
+# ─── DETTE TECHNIQUE OUVERTE ────────────────────────────────────────────────────
+
+dette_technique:
+  - id: TD-001
+    description: "cleaning_log_uri: null — placeholder sans implémentation dans DQFReport"
+    cible: "mif-dqf v1.3.0"
+    condition: "Après stabilisation MIF-DAL Phase 1"
+
+  - id: TD-002
+    description: "trend hardcodé 'STABLE' dans DQFReport"
+    cible: "mif-dqf v1.3.0"
+    condition: "Après stabilisation MIF-DAL Phase 1"
+
+  - id: TD-003
+    description: "PENDING et UNCERTIFIED absents de DQFStatus enum"
+    cible: "mif-dqf v1.3.0 — conditionnel"
+    condition: "Seulement si MIF-DAL rencontre un cas non couvert"
+
+  - id: TD-004
+    description: "epistemic_weight absent du manifeste DQF — confondu avec purity_index"
+    cible: "mif-dqf v1.3.0"
+    condition: "Après amendement PCCD M5+M7 validé"
+
+  - id: TD-005
+    description: "assembly_hash différent si fallback source utilisé pour même actif/période"
+    cible: "mif-dal v0.2.0"
+    condition: "Comportement documenté dans D-DAL-006 — intentionnel."
+    note: "Pas un bug, un fait architectural."
+
+  - id: TD-006
+    description: "Oracle signal mif-core spécifique PAXG/BTC — oracle générique synthétique absent"
+    cible: "mif-core v0.2.0"
+    condition: "v0.1 oracle peut être PAXG/BTC."
+
+  - id: TD-007
+    description: "compute_n_effectif() pour correction DSR non implémenté (AM-004)"
+    cible: "mif-core v0.1 — bloquant pour QS-MÉTIS"
+    condition: "Implémenter avant tout run QS-MÉTIS."
+
+  - id: TD-008
+    description: "AQI gravities (0.20/0.10/0.05/0.30) calibrées à l'intuition"
+    cible: "mif-dal v0.2.0"
+    condition: "Après 3+ assets en production avec historique de fetch réel"
+
+  - id: TD-009
+    description: "yfinance épinglé >=1.3.0,<2.0.0 — migration future vers yfinance 2.x"
+    cible: "mif-dal v0.2.0"
+    condition: "Session dédiée. 1.3.0→2.x change MultiIndex — pas de migration silencieuse."
+
+  - id: TD-010
+    description: "Ruff : 11 erreurs E501/F841/F601 dans dal/ et tests/ (non-bloquant fonctionnel)"
+    cible: "mif-dal v0.1.0 — avant publication"
+    condition: |
+      fix_ruff.sh généré (2026-05-10). Appliquer avant uv publish.
+      Erreurs : dukascopy.py (F841, E501), kraken.py (E501×4),
+      yahoo.py (F601, E501), handoff.py (E501×2), source.py (E501),
+      test_dukascopy_adapter.py (F841), test_integration.py (E501×3),
+      test_yahoo_adapter.py (E501×2).
+    statut: "OUVERT — fix_ruff.sh disponible"
+
+  - id: TD-011
+    description: "verify_install.py v1 — bug API : get_certified_stream appelé sans self"
+    cible: "mif-dal v0.1.0 — avant publication"
+    condition: "verify_install.py v2 généré (2026-05-10). Remplacer scripts/verify_install.py."
+    statut: "RÉSOLU — v2 disponible"
+
+# ─── ANGLES MORTS RÉSIDUELS ────────────────────────────────────────────────────
+
+angles_morts_documentes:
+  - id: AM-001
+    description: "test_strategy_fn_is_not_constant() absent du code"
+    risque: "Bug closure QAAF Studio 3.0 peut se reproduire dans mif-core Phase 1"
+    action: "Premier test à écrire dans la suite mif-core — avant tout autre test Phase 1"
+    statut: "OUVERT"
+
+  - id: AM-002
+    description: "Vérification collision namespace PyPI mif-dal avant publication"
+    statut: "FERMÉ — vérification effectuée session 2026-05-06"
+
+  - id: AM-004
+    description: "compute_n_effectif() pour DSR non implémenté — voir TD-007"
+    statut: "OUVERT"
+
+  - id: AM-005
+    description: "Protocole post-NON QS-MÉTIS non opérationnalisé"
+    statut: "OUVERT — concerne QAAF Studio, pas bloquant pour MIF-DAL"
+
+# ─── PATTERNS INTERDITS ────────────────────────────────────────────────────────
+
+patterns_interdits:
+  - "DOCS_AVANT_CODE : documentation pour API inexistante — KB-004"
+  - "FIX_PONCTUEL_SANS_VISION : traiter symptômes × N sans identifier cause racine"
+  - "SCOPE_AVANT_VALIDATION : CI/CD, packaging avant code fonctionnel"
+  - "MYPY_SILENCIEUX : || true masque des erreurs"
+  - "DEUX_SOURCES_VÉRITÉ : état déclaré dans 2 fichiers sans synchronisation"
+  - "STRATEGY_FN_CLOSURE : capturer des allocations pré-calculées dans strategy_fn"
+  - "TOOLING_AVANT_SPEC : scripts workflow sans lire la spec du module"
+  - "AUTOMATION_AVANT_VALIDATION : script complexe avant confirmation manuelle"
+  - "FAKE_CODE : fonctions vides ou parsing fragile présentés comme solution"
+  - "ARTIFACT_PARTIEL : jamais sed/awk sur Python — artifact Python = fichier entier"
+
+# ─── FICHIERS DE RÉFÉRENCE COURANTS ───────────────────────────────────────────
+
+references_cles:
+  dqf:
+    spec: "decisions_dqf_v1_1.md (fermé)"
+    kb: "KB_MIF_README_Index.md (TALK-001 à TALK-010)"
+    package: "PyPI mif-dqf v1.2.0.post1 · 224/224 tests"
+
+  dal:
+    spec: "DAL_SPECIFICATION_v1.0.md (toutes décisions fermées)"
+    codification: "MIF_Component_Codification_v1.1.md"
+    halo: "anamnese_state.yaml (ce fichier) + protocols.yaml + profil_stable.yaml"
+    package: "PyPI mif-dal v0.1.0 — prêt publication"
+    checklist_reference: "checklist_pass65-65.txt — vert de référence (65/65 PASS)"
+    kb_sessions: "KB-DAL-001 à KB-DAL-005 (publiés) · KB-DAL-006 (à créer)"
+
+  mif_core:
+    spec: "À écrire — première action MIF-Core"
+    kb_lessons: "bug_make_strategy_fn().md"
+    package: "PyPI mif-core — non commencé"
+    prerequis: "mif-dal v0.1.0 publié sur PyPI (débloqué)"
+
+  qaaf_studio:
+    paf: "PAF_Pair_Adequacy_Framework.md — QS-PAF, PAS PyPI"
+    metis: "protocole_metis_2.1.md — QS-MÉTIS, PAS PyPI"
+
+# ─── MÉTRIQUES HALO [AGENT-WRITABLE] ──────────────────────────────────────────
+
+metriques_session:
+  dal_tests_passing: 169
+  dal_tests_failing: 0
+  dal_tests_skipped: 8
+  dal_coverage: "≥ 80% (global dal/)"
+  adversarial_p2_passing: "41/41"
+  adversarial_p3_passing: "65/65"
+  dsig_derniere_session: "78"
+  violations_protocols: 0
+  sprints_completes: >
+    DAL-001 DAL-002 DAL-003 DAL-004 DAL-005 DAL-006 DAL-007
+    DAL-008 DAL-009 feat/dukascopy-integration DAL-Phase3
+  sprints_restants: "fix_ruff + verify_install → uv publish → MIF-Core Phase 0"
+  connaissances_ajoutees: >
+    KB-DAL-006 (à créer) : verify_install bug API, Ruff fix procedure,
+    cleanup_repo.sh, Kraken date limit rule permanente,
+    checklist_pass65-65.txt comme référence vert de publication
