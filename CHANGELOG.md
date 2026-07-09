@@ -2,7 +2,7 @@
 
 All notable changes to mif-dal are documented here.
 
-## [0.1.0] — 2026-05-XX
+## [0.1.0] — 2026-07-09
 
 ### Added
 - `DALHandoff` — frozen dataclass, 15 fields, `assembly_hash`, AQI

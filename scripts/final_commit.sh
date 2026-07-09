@@ -37,7 +37,7 @@ git add \
     tests/test_yahoo_adapter.py \
     scripts/validate_dal_state.py \
     scripts/validate_environment.py \
-    scripts/verify_install.py
+    scripts/test_install.py
 
 git commit -m "i18n: translate French comments and docstrings to English
 
@@ -45,7 +45,7 @@ git commit -m "i18n: translate French comments and docstrings to English
 - dal/core/: handoff, sources
 - dal/exceptions.py, dal/interfaces/source.py
 - tests/: all test files
-- scripts/: validate_dal_state, validate_environment, verify_install
+- scripts/: validate_dal_state, validate_environment, test_install
 Translated by Claude Haiku — logic unchanged, technical terms preserved."
 
 # ── Commit 2: docs — README + CHANGELOG ──────────────────────────────────────
@@ -140,4 +140,4 @@ echo "  uv publish                    # production"
 echo ""
 echo "  # Verify from clean install"
 echo "  pip install mif-dal==0.1.0"
-echo "  python scripts/verify_install.py"
+  echo "  python scripts/test_install.py"

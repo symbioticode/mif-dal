@@ -26,7 +26,4 @@ __all__ = [
     "DALHandoff",
     "DALHandoffError",
     "DALVersionError",
-    "get_certified_stream",  # ← manquant
-    "get_diagnostic_stream",  # ← manquant
-    #    "__version__",
 ]

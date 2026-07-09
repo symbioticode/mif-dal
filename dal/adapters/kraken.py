@@ -25,7 +25,7 @@ from __future__ import annotations
 import hashlib
 import time
 from datetime import UTC, datetime
-from typing import ClassVar
+from typing import Any, ClassVar
 
 import pandas as pd
 import requests
@@ -152,7 +152,6 @@ class KrakenAdapter:
         interval = self.TIMEFRAME_MAP[request.timeframe]
 
         start_ts = int(pd.Timestamp(request.start, tz="UTC").timestamp())
-        end_ts = int(pd.Timestamp(request.end, tz="UTC").timestamp())
 
         all_raw_bytes = b""
         all_frames: list[pd.DataFrame] = []
@@ -170,10 +169,11 @@ class KrakenAdapter:
                 break
 
             # Truncate to requested period
-            start_ts = pd.Timestamp(request.start, tz="UTC")
-            end_ts = pd.Timestamp(request.end, tz="UTC")
+            # après — nouveaux noms, aucune collision avec les int du haut de fonction
+            req_start = pd.Timestamp(request.start, tz="UTC")
+            req_end = pd.Timestamp(request.end, tz="UTC")
             df_chunk = df_chunk[
-                (df_chunk.index >= start_ts) & (df_chunk.index <= end_ts)
+                (df_chunk.index >= req_start) & (df_chunk.index <= req_end)
             ]
 
             # If we have data in our requested range, keep it
@@ -253,7 +253,7 @@ class KrakenAdapter:
             requests.RequestException: Network error.
             RuntimeError: Kraken business error (e.g., invalid pair).
         """
-        params = {"pair": pair, "interval": interval, "since": since}
+        params: dict[str, Any] = {"pair": pair, "interval": interval, "since": since}
         response = requests.get(
             self.BASE_URL,
             params=params,

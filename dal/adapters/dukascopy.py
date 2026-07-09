@@ -125,7 +125,7 @@ class DukascopyAdapter:
                 timeframe=request.timeframe,
                 fallback=False,
             )
-
+        
         if request.timeframe not in self.TIMEFRAME_MAP:
             return FetchResult(
                 data=pd.DataFrame(),
@@ -241,10 +241,6 @@ class DukascopyAdapter:
                     rows=0,
                     timeframe=request.timeframe,
                     fallback=False,
-                    error=(
-                        f"Dukascopy CSV too small ({len(raw_bytes)} bytes)"
-                        " — data missing"
-                    ),
                 )
 
             # Hash on raw bytes before any parsing
@@ -262,7 +258,6 @@ class DukascopyAdapter:
                 rows=0,
                 timeframe=request.timeframe,
                 fallback=False,
-                error="Dukascopy CSV empty after parsing",
             )
 
         status = "partial" if truncated else "success"

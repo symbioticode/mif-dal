@@ -19,7 +19,7 @@ from __future__ import annotations
 import hashlib
 import io
 from datetime import UTC, datetime
-from typing import ClassVar
+from typing import Any, ClassVar
 
 import pandas as pd
 
@@ -310,7 +310,7 @@ class YahooAdapter:
 
             # Undocumented but stable Yahoo Finance API URL
             url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
-            params = {
+            params: dict[str, Any] = {
                 "period1": start_ts,
                 "period2": end_ts,
                 "interval": yahoo_interval,

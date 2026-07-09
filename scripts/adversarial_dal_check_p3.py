@@ -722,10 +722,11 @@ _NETWORK = False  # activé par --run-network
 @check("E", "get_diagnostic_stream retourne DALHandoff avec DQFReport réel [réseau]")
 def _e01():
     if not _NETWORK:
-        return  # skip gracieux si pas --run-network
+        return
     import pandas as pd
     from dqf import DQFReport
 
+    from dal import DAL, DALConfig
     from dal.adapters.in_memory import InMemorySource
     from dal.core.handoff import DALHandoff
 
@@ -740,19 +741,15 @@ def _e01():
         index=pd.to_datetime(["2024-01-02", "2024-01-03", "2024-01-04"], utc=True),
     )
 
-    src = InMemorySource(asset_id="BTC-USD", data=df)
-
-    from dal import DALConfig, get_diagnostic_stream
-
-    config = DALConfig(
+    src = InMemorySource(source_id="test", data={"BTC-USD": df})
+    dal_instance = DAL(DALConfig(), sources=(src,))
+    handoff = dal_instance.get_diagnostic_stream(
         asset_id="BTC-USD",
-        timeframe="1D",
+        source_preference=["test"],
         start="2024-01-02",
         end="2024-01-04",
-        calendar="BTC",
-        sources=[src],
+        calendar="CRYPTO_247",
     )
-    handoff = get_diagnostic_stream(config)
     assert isinstance(
         handoff, DALHandoff
     ), f"Retourne {type(handoff)} au lieu de DALHandoff"
@@ -771,7 +768,7 @@ def _e02():
         return
     import pandas as pd
 
-    from dal import DALConfig, get_diagnostic_stream
+    from dal import DAL, DALConfig
     from dal.adapters.in_memory import InMemorySource
 
     df = pd.DataFrame(
@@ -786,16 +783,15 @@ def _e02():
     )
 
     def _call():
-        src = InMemorySource(asset_id="PAXG-USD", data=df.copy())
-        config = DALConfig(
+        src = InMemorySource(source_id="test", data={"PAXG-USD": df.copy()})
+        dal_instance = DAL(DALConfig(), sources=(src,))
+        return dal_instance.get_diagnostic_stream(
             asset_id="PAXG-USD",
-            timeframe="1D",
+            source_preference=["test"],
             start="2024-01-02",
             end="2024-01-02",
-            calendar="NYSE",
-            sources=[src],
-        )
-        return get_diagnostic_stream(config).assembly_hash
+            calendar="CRYPTO_247",
+        ).assembly_hash
 
     h1, h2 = _call(), _call()
     assert h1 == h2, f"Non-reproductible : {h1} ≠ {h2}"
@@ -869,8 +865,6 @@ def _g01():
         dal, "__all__"
     ), "dal.__all__ absent — requis pour pip install propre"
     expected = {
-        "get_certified_stream",
-        "get_diagnostic_stream",
         "DALConfig",
         "DALHandoff",
     }

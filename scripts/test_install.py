@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-verify_install.py — Gate de vérification post-installation mif-dal
-Usage : python scripts/verify_install.py
+test_install.py — Gate de vérification post-installation mif-dal
+Usage : python scripts/test_install.py
 Attendu : toutes les vérifications passent sans exception.
 """
 import platform
@@ -47,7 +47,7 @@ def main() -> int:
         from dal import DAL, DALConfig
 
         config = DALConfig()
-        dal_instance = DAL(config)
+        dal_instance = DAL(config, sources=())
         return dal_instance is not None
 
     if not check("DAL(DALConfig()) instanciable", check_dal_init):
@@ -59,7 +59,7 @@ def main() -> int:
 
         from dal import DAL, DALConfig
 
-        dal_instance = DAL(DALConfig())
+        dal_instance = DAL(DALConfig(), sources=())
         sig = inspect.signature(dal_instance.get_certified_stream)
         params = set(sig.parameters.keys())
         required = {"asset_id", "source_preference", "start", "end", "calendar"}
@@ -79,7 +79,7 @@ def main() -> int:
 
         from dal import DAL, DALConfig
 
-        dal_instance = DAL(DALConfig())
+        dal_instance = DAL(DALConfig(), sources=())
         sig = inspect.signature(dal_instance.get_diagnostic_stream)
         params = set(sig.parameters.keys())
         required = {"asset_id", "source_preference", "start", "end", "calendar"}
@@ -184,7 +184,7 @@ def main() -> int:
             },
             index=dates,
         )
-        source = InMemorySource({"TEST-USD": df})
+        source = InMemorySource(source_id="test", data={"TEST-USD": df})
         assert source.supports("TEST-USD") is True
         assert source.supports("UNKNOWN-USD") is False
 
@@ -193,7 +193,6 @@ def main() -> int:
             start="2024-01-01",
             end="2024-01-10",
             timeframe="1D",
-            calendar="NYSE",
         )
         result = source.fetch(req)
         assert result.status == "success"
@@ -227,11 +226,11 @@ def main() -> int:
     print()
     if failures == 0:
         print(
-            f"✅  verify_install.py — {7 - failures}/7 PASS — mif-dal {dal.__version__} OK"
+            f"✅  test_install.py — {7 - failures}/7 PASS — mif-dal {dal.__version__} OK"
         )
         return 0
     else:
-        print(f"❌  verify_install.py — {7 - failures}/7 PASS — {failures} FAIL")
+        print(f"❌  test_install.py — {7 - failures}/7 PASS — {failures} FAIL")
         return 1
 
 
