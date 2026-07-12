@@ -1,0 +1,9 @@
+[coverage:run]
+source = dal
+
+[coverage:report]
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:
+    def __repr__
+show_missing = True

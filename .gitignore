@@ -1,0 +1,116 @@
+# ─── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# ─── Tests & Coverage ────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ─── Nix ─────────────────────────────────────────────────────────────────────
+result
+result-*
+.direnv/
+*.nix
+*.lock
+
+# ─── Halo ─────────────────────────────────────────────────────────────────────
+halo/
+**/*halo*
+**/*HALO*
+which_github.sh
+
+# ─── Gouvernance interne ──────────────────────────────────────────────────────
+docs/archive/
+**/old_halo/
+**/*pccd*
+**/*PCCD*
+**/*anamnese*
+**/anamnese_state*.yaml
+protocols.yaml
+profil_stable.yaml
+
+# ─── uv ──────────────────────────────────────────────────────────────────────
+# uv.lock est versionné — ne pas ignorer
+# .python-version peut être ignoré si géré par flake.nix
+.python-version
+
+# ─── Backups et temporaires ───────────────────────────────────────────────────
+*.bak
+*.old
+*.orig
+*.tmp
+*~
+.DS_Store
+Thumbs.db
+
+# ─── IDE ─────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.ropeproject
+
+# ─── Données de cache DAL ────────────────────────────────────────────────────
+# Le cache local est généré à l'exécution — ne pas versionner
+.dal_cache/
+dal_cache/
+
+# ─── Dukascopy — données téléchargées ────────────────────────────────────────
+dukascopy/data/
+*.csv.gz
+# Note : les fixtures CSV de test dans tests/ sont versionnées
+
+# ─── Secrets et credentials ──────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# ─── Artefacts de build PyPI ─────────────────────────────────────────────────
+dist/
+*.whl
+*.tar.gz
+
+# ─── Logs ────────────────────────────────────────────────────────────────────
+*.log
+logs/
