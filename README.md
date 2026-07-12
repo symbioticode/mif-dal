@@ -1,7 +1,7 @@
 # MIF-DAL — Data Abstraction Layer
 
 [![tests](https://img.shields.io/badge/tests-169%2F169%20passing-brightgreen)](https://github.com/symbioticode/mif-dal/actions)
-[![version](https://img.shields.io/badge/version-0.1.0-blue)](https://pypi.org/project/mif-dal/)
+[![version](https://img.shields.io/pypi/v/mif-dal)](https://pypi.org/project/mif-dal/)
 [![python](https://img.shields.io/badge/python-3.11%2B-blue)](https://pypi.org/project/mif-dal/)
 [![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
 
@@ -207,6 +207,9 @@ uv sync --extra dev
 ./scripts/dev.sh check   # Ruff + Mypy + Pytest
 ```
 
+mif-dal does not ship a `flake.nix` at this stage, unlike mif-dqf — this is a
+deliberate scope decision, not an oversight.
+
 ### Running tests
 
 ```bash
@@ -220,8 +223,7 @@ pytest tests/ --run-network
 ### Validation
 
 ```bash
-python scripts/validate_dal_state.py          # Quick GO/NO-GO
-python scripts/validate_dal_state.py --full   # Full adversarial suite (65 checks)
+python scripts/adversarial_dal_check_p3.py    # Adversarial suite (65 checks)
 ```
 
 ---
