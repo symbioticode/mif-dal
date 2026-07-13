@@ -116,6 +116,28 @@ require coverage and is the primary quality gate.
 
 ---
 
+## NixOS: ImportError: libstdc++.so.6: cannot open shared object file
+
+**Symptom:**
+
+```
+ImportError: libstdc++.so.6: cannot open shared object file: No such file or directory
+```
+
+**Cause:** NixOS does not provide a standard FHS path for shared libraries.
+manylinux wheels (numpy, pandas) expect `libstdc++.so.6` to be resolvable via
+standard system library paths, which NixOS does not provide by default.
+
+**Scope:** NixOS only — does not affect standard Linux distributions, macOS, or Windows.
+
+**Fix:** Provide the missing shared libraries via nix-shell:
+
+```bash
+nix-shell -p stdenv.cc.cc.lib zlib --run 'uv run python scripts/adversarial_dal_check_p3.py'
+```
+
+---
+
 ## mypy not available in venv
 
 **Symptom:**
@@ -191,7 +213,7 @@ If you see this warning, ensure you are on `mif-dal >= 0.1.0`.
 If you suspect non-determinism in hashing, run the adversarial suite:
 
 ```bash
-python scripts/validate_dal_state.py --full
+python scripts/adversarial_dal_check_p3.py
 ```
 
 The adversarial suite verifies: same DataFrame → same hash, different
