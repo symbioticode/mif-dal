@@ -82,14 +82,20 @@ def resolve_and_fetch(
         )
         total_penalty += _GRAVITY_RETRY * retries_used
 
-        if result is None:
+        if result is None or result.status == "failed":
             manifest_entries.append(
                 _failure_manifest_entry(source, request, is_fallback)
             )
+            if last_error is not None:
+                error_detail = str(last_error)
+            elif result is not None:
+                error_detail = f"source reported status={result.status!r}"
+            else:
+                error_detail = "unknown"
             failures.append(
                 {
                     "source_id": source.source_id,
-                    "error": str(last_error) if last_error else "unknown",
+                    "error": error_detail,
                     "retries": retries_used,
                 }
             )
