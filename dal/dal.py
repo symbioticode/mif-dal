@@ -5,6 +5,7 @@ Spec: docs/DAL_SPECIFICATION_v1.0.md §7.
 
 from __future__ import annotations
 
+import pandas as pd
 from dqf import DQFMode
 
 from dal.core.config import DALConfig
@@ -94,6 +95,7 @@ class DAL:
         dqf_version_target: str,
     ) -> DALHandoff:
         sources = self._resolve_sources(source_preference)
+        self._validate_date_range(start, end)
         request = FetchRequest(asset_id=asset_id, start=start, end=end)
         resolution = resolve_and_fetch(
             request=request, sources=sources, config=self._config
@@ -109,6 +111,22 @@ class DAL:
             truncated_days=resolution.truncated_days,
             aqi=resolution.aqi,
         )
+
+    def _validate_date_range(self, start: str, end: str) -> None:
+        try:
+            start_ts = pd.Timestamp(start, tz="UTC")
+        except (ValueError, TypeError) as exc:
+            raise DALConfigError(
+                f"start must be a valid date, got: {start!r}"
+            ) from exc
+        try:
+            end_ts = pd.Timestamp(end, tz="UTC")
+        except (ValueError, TypeError) as exc:
+            raise DALConfigError(f"end must be a valid date, got: {end!r}") from exc
+        if end_ts < start_ts:
+            raise DALConfigError(
+                f"end date must be after start date, got start={start!r} end={end!r}"
+            )
 
     def _resolve_sources(self, preference: list[str]) -> tuple[Source, ...]:
         if not preference:
