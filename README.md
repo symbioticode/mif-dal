@@ -235,7 +235,7 @@ python scripts/adversarial_dal_check_p3.py    # Adversarial suite (65 checks)
 |---|---|
 | [docs/API.md](docs/API.md) | Full public API reference |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Pipeline, decisions, component map |
-| [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Common issues (Kraken limits, NixOS, Dukascopy) |
+| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | Common issues (Kraken limits, NixOS, Dukascopy) |
 | [docs/DAL_SPECIFICATION_v1.0.md](docs/DAL_SPECIFICATION_v1.0.md) | Formal specification — source of truth |
 
 ---
