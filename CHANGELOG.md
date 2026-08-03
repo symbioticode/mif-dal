@@ -2,6 +2,32 @@
 
 All notable changes to mif-dal are documented here.
 
+## [0.2.0] — 2026-08-03
+
+### Added
+- `DAL.get_certified_stream()` / `get_diagnostic_stream()` accept an optional
+  `dqf_config: DQFConfig | None = None`, passed through to `assemble_handoff()`,
+  exposing DQF threshold configuration (e.g. `c4_warn_threshold`) on the public
+  API (#7)
+
+### Fixed
+- `resolve_and_fetch()` now falls back to the next source in
+  `source_preference` when a source reports `status="failed"` without
+  raising, instead of returning that empty/degraded result as if it were a
+  success (#4)
+- `start`/`end` are validated before reaching pandas or an adapter: an
+  unparseable date or `start > end` now raises a clear `DALConfigError`
+  instead of a raw pandas exception or an opaque `DALHandoffError(reason="DQF_VOID")` (#6)
+
+### Documentation
+- Fixed the broken README Quick Start example: `DAL(config)` →
+  `DAL(config, sources=(KrakenAdapter(), YahooAdapter()))` (#3)
+- Fixed the same broken `DAL(config)` example in `docs/API.md`, and the dead
+  `docs/TROUBLESHOOTING.md` link → `TROUBLESHOOTING.md` (#5)
+- Documented the hash-reproducibility trap when revalidating a certification
+  manually outside mif-dal: `raw_data_hash=handoff.assembly_hash` is required
+  to reproduce the original `MIF-UID` (#8)
+
 ## [0.1.0] — 2026-07-09
 
 ### Added
