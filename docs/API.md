@@ -6,9 +6,10 @@ The main entry point.
 
 ```python
 from dal import DAL, DALConfig
+from dal.adapters import KrakenAdapter, YahooAdapter
 
 config = DALConfig()
-dal = DAL(config)
+dal = DAL(config, sources=(KrakenAdapter(), YahooAdapter()))
 ```
 
 ### `DAL.get_certified_stream()`
