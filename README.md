@@ -73,9 +73,10 @@ npm install -g dukascopy-node
 
 ```python
 from dal import DAL, DALConfig
+from dal.adapters import KrakenAdapter, YahooAdapter
 
 config = DALConfig()
-dal = DAL(config)
+dal = DAL(config, sources=(KrakenAdapter(), YahooAdapter()))
 
 # One call per asset — caller composes the pair (architectural decision D-DAL-007)
 h_paxg = dal.get_certified_stream(
