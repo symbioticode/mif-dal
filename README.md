@@ -250,6 +250,34 @@ The `assembly_hash` computed by mif-dal is passed to mif-dqf as `raw_data_hash`,
 so both layers anchor on the same SHA-256 value. The `MIF-UID` produced by
 mif-dqf is included in `DALHandoff.dqf_report`.
 
+### Revalidating a certification manually, outside mif-dal
+
+If you hold a `DALHandoff` and want to revalidate it independently by calling
+`mif-dqf` directly (rather than going back through `mif-dal`), you must pass
+`raw_data_hash=handoff.assembly_hash` explicitly:
+
+```python
+from dqf import DQFConfig, DQFMode, DQFValidator
+
+validator = DQFValidator(DQFConfig(mode=DQFMode.CERTIFICATION))
+
+report = validator.validate(
+    handoff.stream,
+    calendar=handoff.calendar,
+    raw_data_hash=handoff.assembly_hash,  # required to reproduce the same MIF-UID
+)
+
+assert report.mif_uid == handoff.dqf_report.mif_uid
+```
+
+**Warning**: `mif-dal`'s `assembly_hash` and `mif-dqf`'s self-computed default
+hash use two different, incompatible algorithms (different serialization,
+different output format). If you omit `raw_data_hash`, `mif-dqf` silently
+computes its own hash instead of raising an error — the call succeeds, but it
+produces a **different `MIF-UID`** than the one in the original
+`DALHandoff.dqf_report`, with no warning that anything went wrong. Always pass
+`raw_data_hash=handoff.assembly_hash` when revalidating outside `mif-dal`.
+
 ---
 
 ## License
