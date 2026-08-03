@@ -6,7 +6,7 @@ Spec: docs/DAL_SPECIFICATION_v1.0.md §7.
 from __future__ import annotations
 
 import pandas as pd
-from dqf import DQFMode
+from dqf import DQFConfig, DQFMode
 
 from dal.core.config import DALConfig
 from dal.core.handoff import DALHandoff
@@ -38,6 +38,7 @@ class DAL:
         end: str,
         calendar: str,
         dqf_version_target: str,
+        dqf_config: DQFConfig | None = None,
     ) -> DALHandoff:
         """CERTIFICATION mode — strict, deterministic, reproducible."""
         if not calendar:
@@ -54,6 +55,7 @@ class DAL:
             calendar=calendar,
             dqf_mode=DQFMode.CERTIFICATION,
             dqf_version_target=dqf_version_target,
+            dqf_config=dqf_config,
         )
 
     def get_diagnostic_stream(
@@ -65,6 +67,7 @@ class DAL:
         end: str,
         calendar: str,
         dqf_version_target: str = "",
+        dqf_config: DQFConfig | None = None,
     ) -> DALHandoff:
         """DIAGNOSTIC mode — exploratory, advisory DQF result."""
         # Calendar required in v0.1 — DQF does not auto-detect (see TD-009).
@@ -81,6 +84,7 @@ class DAL:
             calendar=calendar,
             dqf_mode=DQFMode.DIAGNOSTIC,
             dqf_version_target=dqf_version_target,
+            dqf_config=dqf_config,
         )
 
     def _run_pipeline(
@@ -93,6 +97,7 @@ class DAL:
         calendar: str,
         dqf_mode: DQFMode,
         dqf_version_target: str,
+        dqf_config: DQFConfig | None = None,
     ) -> DALHandoff:
         sources = self._resolve_sources(source_preference)
         self._validate_date_range(start, end)
@@ -110,6 +115,7 @@ class DAL:
             coverage=resolution.coverage,
             truncated_days=resolution.truncated_days,
             aqi=resolution.aqi,
+            dqf_config=dqf_config,
         )
 
     def _validate_date_range(self, start: str, end: str) -> None:
